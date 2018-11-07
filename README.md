@@ -22,10 +22,10 @@ Aplicación Java EE (Web Profile de Java EE 7) "Receta Electrónica"
 ### Obtener el código de partida
 El código de partida está disponible para cada grupo en su respectivo repositorio GitHub
 
-* Puede descargarse el ZIP con la rama `master` completa en <https://github.com/dagss2018/DAGSS2018_[nombre-de-grupo]/archive/master.zip>
+* Puede descargarse el ZIP con la rama `master` completa en <https://github.com/dagss2018/DAGSS_[nombre-de-grupo]/archive/master.zip>
 * Puede clonarse desde línea de comandos
     ```
-    git clone https://github.com/dagss2018/DAGSS2018_[nombre-de-grupo].git
+    git clone https://github.com/dagss2018/DAGSS_[nombre-de-grupo].git
     ```
 
 
@@ -44,7 +44,7 @@ El código de partida está disponible para cada grupo en su respectivo reposito
 
   * moverse a la carpeta `sql` del proyecto 
     ```
-    cd DAGSS2018_[nombre-de-grupo]
+    cd DAGSS_[nombre-de-grupo]
     cd sql
     ```
   
@@ -60,3 +60,9 @@ El código de partida está disponible para cada grupo en su respectivo reposito
 ### Detalles del proyecto: 
 
 Enunciado en <http://ccia.ei.uvigo.es/docencia/DAGSS/1819/practicas/proyectoDAGSS2018/>
+
+Librerias externas utilizadas (ver `pom.xml`)
+* Bootsfaces: libreria de componentes gráficos JSF. WEB: [https://www.bootsfaces.net/](https://www.bootsfaces.net/)
+* Omnifaces: utilidades para el desarrollo con JSF. WEB: [http://showcase.omnifaces.org/](http://showcase.omnifaces.org/)
+* Jasypt: libreria criptográfica (usada en almacenamiento de contraseñas). WEB: [http://www.jasypt.org/](http://www.jasypt.org/)
+* Primefaces: libreria de componentes gráficos JSF (incluida en `pom-xml` pero no utilizada). WEB: [https://www.primefaces.org/](https://www.primefaces.org/)
