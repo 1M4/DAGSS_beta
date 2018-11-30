@@ -94,6 +94,10 @@ public class Medico extends Usuario implements Serializable {
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }
+    
+    public String getNombreCompleto(){
+        return this.apellidos + ", " + this.nombre;
+    }
 
     public CentroSalud getCentroSalud() {
         return centroSalud;

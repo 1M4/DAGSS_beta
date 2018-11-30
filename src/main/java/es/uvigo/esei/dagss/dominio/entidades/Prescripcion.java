@@ -115,6 +115,10 @@ public class Prescripcion implements Serializable {
     public Date getFechaInicio() {
         return fechaInicio;
     }
+    
+    public String getFechaInicioFormateada(){
+        return fechaInicio.toString().substring(4, 10) + " " + fechaInicio.toString().substring(fechaInicio.toString().length()-4);
+    }
 
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
@@ -122,6 +126,10 @@ public class Prescripcion implements Serializable {
 
     public Date getFechaFin() {
         return fechaFin;
+    }
+    
+    public String getFechaFinFormateada(){
+        return fechaFin.toString().substring(4, 10) + " " + fechaFin.toString().substring(fechaFin.toString().length()-4);
     }
 
     public void setFechaFin(Date fechaFin) {

@@ -5,11 +5,16 @@ package es.uvigo.esei.dagss.controladores.farmacia;
 
 import es.uvigo.esei.dagss.controladores.autenticacion.AutenticacionControlador;
 import es.uvigo.esei.dagss.dominio.daos.FarmaciaDAO;
+import es.uvigo.esei.dagss.dominio.daos.RecetaDAO;
+import es.uvigo.esei.dagss.dominio.entidades.EstadoReceta;
 import es.uvigo.esei.dagss.dominio.entidades.Farmacia;
+import es.uvigo.esei.dagss.dominio.entidades.Receta;
 import es.uvigo.esei.dagss.dominio.entidades.TipoUsuario;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.time.Instant;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -26,12 +31,17 @@ public class FarmaciaControlador implements Serializable {
     private Farmacia farmaciaActual;
     private String nif;
     private String password;
+    private String numTarjetaPaciente;
+    private List<Receta> listaRecetas;
 
     @Inject
     private AutenticacionControlador autenticacionControlador;
 
     @EJB
     private FarmaciaDAO farmaciaDAO;
+    
+    @Inject
+    private RecetaDAO recetaDAO;
 
     /**
      * Creates a new instance of AdministradorControlador
@@ -62,9 +72,45 @@ public class FarmaciaControlador implements Serializable {
     public void setFarmaciaActual(Farmacia farmaciaActual) {
         this.farmaciaActual = farmaciaActual;
     }
+    
+    public List<Receta> getListaRecetas() {
+        return listaRecetas;
+    }
+
+    public void setListaRecetas(List<Receta> listaRecetas) {
+        this.listaRecetas = listaRecetas;
+    }
+        
+    public String getNumTarjetaPaciente() {
+        return numTarjetaPaciente;
+    }
+
+    public void setNumTarjetaPaciente(String numTarjetaPaciente) {
+        this.numTarjetaPaciente = numTarjetaPaciente;
+    }
 
     private boolean parametrosAccesoInvalidos() {
         return ((nif == null) || (password == null));
+    }
+    
+    public boolean esDisponible(Receta receta){
+        Instant now = Instant.now();
+        if(receta==null) return false;
+        return receta.getInicioValidez().toInstant().isBefore(now) && receta.getFinValidez().toInstant().isAfter(now) && !receta.getEstadoReceta().getEtiqueta().equals("SERVIDA");
+    }
+    
+    public String doServir(Receta receta){
+        receta.setEstado(EstadoReceta.SERVIDA);
+        receta.setFarmaciaDispensadora(farmaciaActual);
+        recetaDAO.actualizar(receta);
+        listaRecetas=recetaDAO.buscarPorNumTarjeta(numTarjetaPaciente);
+        return null;
+    }
+    
+    public String doBuscarRecetas(){
+        listaRecetas=null;
+        listaRecetas=recetaDAO.buscarPorNumTarjeta(numTarjetaPaciente);
+        return null;
     }
 
     public String doLogin() {

@@ -91,6 +91,10 @@ public class Receta implements Serializable {
     public void setInicioValidez(Date inicioValidez) {
         this.inicioValidez = inicioValidez;
     }
+    
+    public String getFechaInicioFormateada(){
+        return inicioValidez.toString().substring(4, 10) + " " + inicioValidez.toString().substring(inicioValidez.toString().length()-4);
+    }
 
     public Date getFinValidez() {
         return finValidez;
@@ -99,6 +103,11 @@ public class Receta implements Serializable {
     public void setFinValidez(Date finValidez) {
         this.finValidez = finValidez;
     }
+    
+    public String getFechaFinFormateada(){
+        return finValidez.toString().substring(4, 10) + " " + finValidez.toString().substring(finValidez.toString().length()-4);
+    }
+
 
     public EstadoReceta getEstado() {
         return estadoReceta;

@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
 
     <body>
 
@@ -18,6 +19,51 @@
             </ui:define>
 
             <ui:define name="contenido">
+                <h:form id="formularioListado">
+                    <b:container>
+                        <b:inputText id="numTarjetaPaciente" label="Num. Tarjeta Paciente:" value="#{farmaciaControlador.numTarjetaPaciente}" />
+                        <b:commandButton value="Buscar" action="#{farmaciaControlador.doBuscarRecetas()}" span="2"/>
+                    </b:container>
+                    <b:container fluid="true">
+                        
+                        <b:panel title="Listado de Recetas del Paciente" collapsible="false">
+                            <b:dataTable id="tablaListado"  class="tablaListadoClass"
+                                         value="#{farmaciaControlador.listaRecetas}"
+                                         var="receta" 
+                                         page-length="5" page-length-menu="[5,10,20]">
+                                <b:dataTableColumn label="Médico">
+                                    <h:outputText value="#{receta.prescripcion.medico.getNombreCompleto()}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Medicamento">
+                                    <h:outputText value="#{receta.prescripcion.medicamento.getNombre()}" />
+                                </b:dataTableColumn>                    
+
+                                <b:dataTableColumn label="Fecha Inicio">
+                                    <h:outputText value="#{receta.getFechaInicioFormateada()}" />
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn label="Fecha Fin">
+                                    <h:outputText value="#{receta.getFechaFinFormateada()}" />
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn label="Estado" >
+                                    <h:outputText value="#{receta.estadoReceta.etiqueta}" />
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn label="" orderable="false">
+                                    <b:commandButton id="botonVer" icon-awesome="eye" tooltip="Ver" ajax="true" 
+                                                     rendered="#{farmaciaControlador.esDisponible(receta)}"
+                                                     actionListener="#{farmaciaControlador.doServir(receta)}"
+                                                     update="@(.tablaListadoClass)"
+                                                      />
+
+                                </b:dataTableColumn>                            
+                            </b:dataTable>
+
+                        </b:panel>
+                    </b:container>
+                </h:form>         
+
             </ui:define>
 
         </ui:composition>
