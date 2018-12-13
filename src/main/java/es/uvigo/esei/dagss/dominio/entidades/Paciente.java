@@ -110,6 +110,10 @@ public class Paciente extends Usuario implements Serializable {
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
     }
+    
+    public String getNombreCompleto(){
+        return this.apellidos + ", " + this.nombre;
+    }
 
     public Direccion getDireccion() {
         return direccion;

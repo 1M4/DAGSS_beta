@@ -90,6 +90,11 @@ public class Cita implements Serializable {
     public Date getHora() {
         return hora;
     }
+    
+    public String getHoraAsString(){
+        return hora.toString().substring(11, 16);
+        
+    }
 
     public void setHora(Date hora) {
         this.hora = hora;

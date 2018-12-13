@@ -6,11 +6,20 @@ package es.uvigo.esei.dagss.controladores.medico;
 import es.uvigo.esei.dagss.controladores.autenticacion.AutenticacionControlador;
 import es.uvigo.esei.dagss.dominio.daos.CitaDAO;
 import es.uvigo.esei.dagss.dominio.daos.MedicoDAO;
+import es.uvigo.esei.dagss.dominio.entidades.Cita;
+import es.uvigo.esei.dagss.dominio.entidades.EstadoCita;
 import es.uvigo.esei.dagss.dominio.entidades.Medico;
 import es.uvigo.esei.dagss.dominio.entidades.TipoUsuario;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -29,6 +38,7 @@ public class MedicoControlador implements Serializable {
     private String dni;
     private String numeroColegiado;
     private String password;
+    private List<Cita> listaCitas;
 
     @Inject
     private AutenticacionControlador autenticacionControlador;
@@ -36,11 +46,15 @@ public class MedicoControlador implements Serializable {
 
     @EJB
     private MedicoDAO medicoDAO;
+    
+    @Inject
+    private CitaDAO citaDAO;
 
     /**
      * Creates a new instance of AdministradorControlador
      */
     public MedicoControlador() {
+        
     }
 
     public String getDni() {
@@ -77,6 +91,53 @@ public class MedicoControlador implements Serializable {
 
     private boolean parametrosAccesoInvalidos() {
         return (((dni == null) && (numeroColegiado == null)) || (password == null));
+    }
+    
+    public List<Cita> getListaCitas() {
+        return listaCitas;
+    }
+
+    public void setListaCitas(List<Cita> listaCitas) {
+        this.listaCitas = listaCitas;
+    }
+    
+    public List<Cita> doBuscarCitasHoy(){
+        listaCitas=null;
+        Date today = new Date();
+        String modifiedDate = new SimpleDateFormat("yyyy-MM-dd").format(today);
+        
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            today = format.parse(modifiedDate);
+        } catch (ParseException ex) {
+            //Logger.getLogger(MedicoControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        listaCitas=citaDAO.buscarCitasHoy(medicoActual,today);
+        //return null;
+        return listaCitas;
+    }
+    
+    public boolean esPlanificada(Cita cita){
+                System.out.println(">>>>> Cita es planificada "+cita.toString());
+
+        return cita.getEstado().getEtiqueta().equals("PLANIFICADA");
+    }
+    
+    public void doCompletada(Cita cita){
+        System.out.println(">>>>> Cita "+cita.toString());
+        cita.setEstado(EstadoCita.COMPLETADA);
+        //cita.setDuracion(520);
+        citaDAO.actualizar(cita);
+       // listaCitas = doBuscarCitasHoy();
+       // return null;
+    }
+    
+    public String doAusente(Cita cita){
+        cita.setEstado(EstadoCita.AUSENTE);
+        citaDAO.actualizar(cita);
+        listaCitas = doBuscarCitasHoy();
+        return null;
     }
 
     private Medico recuperarDatosMedico() {

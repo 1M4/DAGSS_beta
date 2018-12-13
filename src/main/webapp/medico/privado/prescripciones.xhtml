@@ -22,7 +22,7 @@
             <ui:define name="contenido">
                 <h:form id="formularioListado">
                     <b:container fluid="true">
-
+                        
                         <b:panel title="Listado de Recetas del Paciente" collapsible="false">
                             <b:dataTable id="tablaListado"  class="tablaListadoClass"
                                          value="#{medicoControlador.doBuscarCitasHoy()}"
@@ -31,26 +31,14 @@
                                 <b:dataTableColumn label="Paciente">
                                     <h:outputText value="#{cita.paciente.getNombreCompleto()}"/>
                                 </b:dataTableColumn>
-                                <b:dataTableColumn label="Hora Estimada">
+                                <b:dataTableColumn label="Hora Estimadda">
                                     <h:outputText value="#{cita.getHoraAsString()}" />
                                 </b:dataTableColumn>                    
 
-                                <b:dataTableColumn label="Estado" >
-                                    <h:outputText value="#{cita.estado.getEtiqueta()}" />
-                                    <b:commandButton id="botonCompletada" value="Completada" tooltip="Completada" ajax="true"
-                                                     actionListener="#{medicoControlador.doCompletada(cita)}"
-                                                     rendered="#{medicoControlador.esPlanificada(cita)}"
-                                                     update="@(.tablaListadoClass)"/>
-                                    <b:commandButton id="botonAusente" value="Ausente" tooltip="Ausente" ajax="true"
-                                                     actionListener="#{medicoControlador.doAusente(cita)}"
-                                                     rendered="#{medicoControlador.esPlanificada(cita)}"
-                                                     update="@(.tablaListadoClass)"/>
-                                </b:dataTableColumn>
-
                                 <b:dataTableColumn label="Prescripciones" orderable="false">
-                                    <h:link outcome="/medico/privado/prescripciones">
-                                        <b:commandButton id="botonVer" value="Prescripciones" tooltip="Prescripciones" ajax="true"/>
-                                    </h:link>
+                                    
+                                    <b:commandButton id="botonVer" value="Prescripciones" tooltip="Prescripciones" ajax="true"/>
+                                    
 
                                 </b:dataTableColumn>                            
                             </b:dataTable>
