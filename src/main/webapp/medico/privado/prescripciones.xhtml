@@ -25,23 +25,79 @@
                         
                         <b:panel title="Listado de Recetas del Paciente" collapsible="false">
                             <b:dataTable id="tablaListado"  class="tablaListadoClass"
-                                         value="#{medicoControlador.doBuscarCitasHoy()}"
-                                         var="cita" 
+                                         value="#{medicoControlador.doBuscarPrescripcionesPaciente()}"
+                                         var="prescripcion" 
                                          page-length="5" page-length-menu="[5,10,20]">
                                 <b:dataTableColumn label="Paciente">
-                                    <h:outputText value="#{cita.paciente.getNombreCompleto()}"/>
+                                    <h:outputText value="#{prescripcion.paciente.getNombreCompleto()}"/>
                                 </b:dataTableColumn>
-                                <b:dataTableColumn label="Hora Estimadda">
-                                    <h:outputText value="#{cita.getHoraAsString()}" />
+                                <b:dataTableColumn label="Medicamento">
+                                    <h:outputText value="#{prescripcion.medicamento.getNombre()}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Dosis">
+                                    <h:outputText value="#{prescripcion.getDosis()}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Indicaciones">
+                                    <h:outputText value="#{prescripcion.getIndicaciones()}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Fecha Inicio">
+                                    <h:outputText value="#{prescripcion.getFechaInicioFormateada()}" />
                                 </b:dataTableColumn>                    
+                                <b:dataTableColumn label="Fecha Fin">
+                                    <h:outputText value="#{prescripcion.getFechaFinFormateada()}" />
+                                </b:dataTableColumn>
 
-                                <b:dataTableColumn label="Prescripciones" orderable="false">
+                                <b:dataTableColumn label="Eliminar" orderable="false">
                                     
-                                    <b:commandButton id="botonVer" value="Prescripciones" tooltip="Prescripciones" ajax="true"/>
+                                    <b:commandButton id="botonVer" value="Eliminar" tooltip="Eliminar" ajax="true"
+                                                     actionListener="#{medicoControlador.eliminarPrescripcion(prescripcion)}"
+                                                     update="@(.tablaListadoClass)"/>
                                     
 
                                 </b:dataTableColumn>                            
                             </b:dataTable>
+
+                        </b:panel>
+                        <b:panel title="Listado de Medicamentos" collapsible="false">
+                            <b:dataTable id="tablaListadoMedicamento"  class="tablaListadoMedicamentoClass"
+                                         value="#{medicoControlador.doBuscarMedicamentos()}"
+                                         var="medicamento" 
+                                         page-length="5" page-length-menu="[5,10,20]">
+                                <b:dataTableColumn label="Nombre">
+                                    <h:outputText value="#{medicamento.getNombre()}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Familia">
+                                    <h:outputText value="#{medicamento.getFamilia()}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Principio Activo">
+                                    <h:outputText value="#{medicamento.getPrincipioActivo()}"/>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn label="Fabrincante">
+                                    <h:outputText value="#{medicamento.getFabricante()}"/>
+                                </b:dataTableColumn>
+                                
+                                <b:dataTableColumn label="Seleccionar" orderable="false">
+                                    
+                                    <b:commandButton id="botonSeleccionar" value="Seleccionar" tooltip="Seleccionar" ajax="true"
+                                                     actionListener="#{medicoControlador.seleccionarMedicamento(medicamento)}"
+                                                     />
+                                    
+
+                                </b:dataTableColumn>                            
+                            </b:dataTable>
+                        </b:panel>
+                        <b:panel>
+                            <b:container>
+                                <b:inputText id="dosis" label="Dosis:" value="#{medicoControlador.prescripcion.dosis}" />
+                                <b:inputText id="indicaciones" label="Indicaciones" value="#{medicoControlador.prescripcion.indicaciones}" />
+                                <b:datepicker id="fechaInicio" mode="toggle-icon" showWeek="true"
+                                              firstDay="1" value="#{medicoControlador.prescripcion.fechaInicio}"
+                                    label="Fecha Inicio:" label-col-sm="4" col-sm="4"  />
+                                <b:datepicker id="fechaFin" mode="toggle-icon" showWeek="true"
+                                              firstDay="1" value="#{medicoControlador.prescripcion.fechaFin}"
+                                    label="Fecha Fin:" label-col-sm="4" col-sm="4"  />
+                                <b:commandButton value="Generar" action="#{medicoControlador.generarPrescripcion()}" span="2"/>
+                            </b:container>
 
                         </b:panel>
                     </b:container>

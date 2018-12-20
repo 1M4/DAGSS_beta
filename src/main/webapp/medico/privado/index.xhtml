@@ -48,8 +48,8 @@
                                 </b:dataTableColumn>
 
                                 <b:dataTableColumn label="Prescripciones" orderable="false">
-                                    <h:link outcome="/medico/privado/prescripciones">
-                                        <b:commandButton id="botonVer" value="Prescripciones" tooltip="Prescripciones" ajax="true"/>
+                                    <h:link outcome="prescripciones.xhtml" value="Prescripciones" onclick="#{medicoControlador.doGestionPrescripciones(cita)}">
+                                        
                                     </h:link>
 
                                 </b:dataTableColumn>                            
