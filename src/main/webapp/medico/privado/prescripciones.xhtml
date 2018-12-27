@@ -12,7 +12,7 @@
         <ui:composition template="/plantillas/plantillaComun.xhtml">
 
             <ui:define name="tituloPagina">
-                <h2>  Pagina principal de Médicos </h2>
+                <h2>  Pagina de prescripciones </h2>
             </ui:define>            
 
             <ui:define name="menu">
@@ -88,7 +88,7 @@
                         </b:panel>
                         <b:panel>
                             <b:container>
-                                <b:inputText id="dosis" label="Dosis:" value="#{medicoControlador.prescripcion.dosis}" />
+                                <b:inputText id="dosis" label="Dosis Diaria:" value="#{medicoControlador.prescripcion.dosis}" />
                                 <b:inputText id="indicaciones" label="Indicaciones" value="#{medicoControlador.prescripcion.indicaciones}" />
                                 <b:datepicker id="fechaInicio" mode="toggle-icon" showWeek="true"
                                               firstDay="1" value="#{medicoControlador.prescripcion.fechaInicio}"

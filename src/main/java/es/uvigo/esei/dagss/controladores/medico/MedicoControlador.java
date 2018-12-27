@@ -15,6 +15,7 @@ import es.uvigo.esei.dagss.dominio.entidades.Medico;
 import es.uvigo.esei.dagss.dominio.entidades.Paciente;
 import es.uvigo.esei.dagss.dominio.entidades.Prescripcion;
 import es.uvigo.esei.dagss.dominio.entidades.TipoUsuario;
+import es.uvigo.esei.dagss.dominio.facade.PrescripcionFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -66,6 +67,9 @@ public class MedicoControlador implements Serializable {
     
     @Inject
     private MedicamentoDAO medicamentoDAO;
+    
+    @Inject
+    private PrescripcionFacade prescripcionFacade;
     
     /**
      * Creates a new instance of AdministradorControlador
@@ -159,7 +163,17 @@ public class MedicoControlador implements Serializable {
         //prescripcion = new Prescripcion();
         listaPrescripciones = null;
         
-        listaPrescripciones= prescripcionDAO.buscarPorPaciente(paciente);
+        Date today = new Date();
+        String modifiedDate = new SimpleDateFormat("yyyy-MM-dd").format(today);
+        
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            today = format.parse(modifiedDate);
+        } catch (ParseException ex) {
+            //Logger.getLogger(MedicoControlador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        listaPrescripciones= prescripcionDAO.buscarPorPaciente(paciente,today);
         
         return listaPrescripciones;
     }
@@ -175,8 +189,7 @@ public class MedicoControlador implements Serializable {
     }
     
     public void seleccionarMedicamento(Medicamento medicamento){
-        System.out.println("HOLA");
-        System.out.println(medicamento);
+        
         //if(prescripcion==null){
           //  prescripcion = new Prescripcion();
         //}
@@ -184,7 +197,19 @@ public class MedicoControlador implements Serializable {
     }
     
     public void generarPrescripcion(){
-        System.out.println("Prescripcion: " + prescripcion.getMedicamento() + " " + prescripcion.getDosis()+ " " + prescripcion.getIndicaciones()+ " " + prescripcion.getFechaInicioFormateada()+ " " + prescripcion.getFechaFinFormateada());
+        if(prescripcion.getMedicamento()!=null && prescripcion.getDosis()!=null && prescripcion.getIndicaciones()!=null && 
+                prescripcion.getFechaInicioFormateada()!=null && prescripcion.getFechaFinFormateada()!=null)
+        {
+            prescripcion.setMedico(medicoActual);
+            prescripcion.setPaciente(paciente);
+            prescripcionFacade.planificarRecetas(prescripcion);
+            
+            System.out.println("Prescripcion: " + prescripcion.getMedicamento() + " " + prescripcion.getDosis()+ " " 
+                    + prescripcion.getIndicaciones()+ " " + prescripcion.getFechaInicioFormateada()+ " " + prescripcion.getFechaFinFormateada());
+            
+            prescripcion = new Prescripcion();
+        }
+        
     }
     
     public void doCompletada(Cita cita){
